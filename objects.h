@@ -53,8 +53,6 @@ protected:
 	float m_posYPerSec;
 	float m_directionPerSec;
 
-	float m_boundingCircle;
-
 	Entity(const OBJECT_TYPE type, const unsigned id);
 	virtual ~Entity();
 

@@ -49,10 +49,11 @@ void GraphicsHelper::setDirection(const float direction)
 	invalidateMatrix();
 }
 
-void GraphicsHelper::setScale(const float length, const float width)
+void GraphicsHelper::setScale(const float length, const float width, const float height)
 {
 	m_length = length;
 	m_width = width;
+	m_height = height;
 
 	invalidateMatrix();
 }
@@ -85,12 +86,24 @@ void GraphicsHelper::drawRectangle()
 	m_pDev->DrawPrimitive(D3DPT_TRIANGLEFAN, 34, 2);
 }
 
+void GraphicsHelper::drawCube()
+{
+	m_pDev->SetTextureStageState(0, D3DTSS_CONSTANT, D3DCOLOR_ARGB((int)(m_alpha * 255), 255, 255, 255));
+	m_pDev->SetStreamSource(0, m_pVB, 0, sizeof(CUSTOMVERTEX));
+	m_pDev->SetFVF(CUSTOM_FVF);
+	m_pDev->SetTransform(D3DTS_WORLD, &m_matWorld);
+	for (int i = 0; i < 6; i++)
+	{
+		m_pDev->DrawPrimitive(D3DPT_TRIANGLEFAN, 38 + 4 * i, 2);
+	}
+}
+
 void GraphicsHelper::invalidateMatrix()
 {
 	D3DXMATRIX matTranslation, matRotation, matScaling;
 	D3DXMatrixTranslation(&matTranslation, m_x, m_y, 0.0f);
 	D3DXMatrixRotationZ(&matRotation, m_direction * D3DX_PI / 180.0f);
-	D3DXMatrixScaling(&matScaling, m_length, m_width, 1.0f);
+	D3DXMatrixScaling(&matScaling, m_length, m_width, m_height);
 
 	m_matWorld = matScaling * matRotation * matTranslation;
 }

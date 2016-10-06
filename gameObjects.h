@@ -76,13 +76,20 @@ class Asteroid : public Entity
 protected:
 	float m_destroyBelowY;
 
+	float m_height;
+
 public:
 	Asteroid(const unsigned id);
 	virtual ~Asteroid();
 
+	void setHeight(const float height);
+	float getHeight() const;
+
 	virtual bool initialize();
 
 	virtual void update(const float seconds);
+
+	virtual float getBoundingCircle() const;
 
 protected:
 	bool createGraphics();

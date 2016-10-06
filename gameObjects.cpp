@@ -172,7 +172,7 @@ Projectile::~Projectile() {}
 
 bool Projectile::initialize()
 {
-	m_destroyAboveY = 2.5f;
+	m_destroyAboveY = 5.0f;
 
 	return Entity::initialize();
 }
@@ -206,9 +206,19 @@ Asteroid::Asteroid(const unsigned id)
 
 Asteroid::~Asteroid() {}
 
+void Asteroid::setHeight(const float height)
+{
+	m_height = height;
+}
+
+float Asteroid::getHeight() const
+{
+	return m_height;
+}
+
 bool Asteroid::initialize()
 {
-	m_destroyBelowY = -2.5f;
+	m_destroyBelowY = -5.0f;
 
 	return Entity::initialize();
 }
@@ -221,6 +231,11 @@ void Asteroid::update(const float seconds)
 	{
 		setRemoveMark(true);
 	}
+}
+
+float Asteroid::getBoundingCircle() const
+{
+	return sqrtf(m_length*m_length + m_width*m_width + m_height*m_height);
 }
 
 bool Asteroid::createGraphics()
@@ -256,6 +271,7 @@ void AsteroidSpawner::spawnAsteroid()
 	pAsteroid->setDirection(m_direction);
 	pAsteroid->setWidth(m_width);
 	pAsteroid->setLength(m_length);
+	pAsteroid->setHeight(m_width); // to change
 	float directionInRads = m_direction * D3DX_PI / 180.0f;
 	float xSpeed = cosf(directionInRads) * m_startingSpeed;
 	float ySpeed = sinf(directionInRads) * m_startingSpeed;
@@ -278,13 +294,13 @@ void AsteroidSpawner::setDeviation(const float deviation)
 
 void AsteroidSpawner::increaseDifficulty()
 {
-	m_spawnRate *= 1.125f;
-	m_startingSpeed *= 1.05;
+	m_spawnRate *= 1.25f;
+	m_startingSpeed *= 1.05f;
 }
 
 bool AsteroidSpawner::initialize()
 {
-	m_spawnRate = 0.25f;
+	m_spawnRate = 1.0f;
 	m_startingSpeed = 2.0f;
 
 	return Entity::initialize();

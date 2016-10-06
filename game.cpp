@@ -65,16 +65,16 @@ int Game::loop()
 			QueryPerformanceCounter((LARGE_INTEGER*)&startCounter);
 			if (m_pGameStateCurrent) { m_pGameStateCurrent->update(secondsPerTick); }
 			QueryPerformanceCounter((LARGE_INTEGER*)&endCounter);
-			float secondsTaken = (endCounter - startCounter) * secondsPerCount;
+			float secondsTaken = static_cast<float>((endCounter - startCounter) * secondsPerCount);
 			float secondsForSleep = secondsPerTick - secondsTaken;
 			if (secondsForSleep > 0.0f)
 			{
 				QueryPerformanceCounter((LARGE_INTEGER*)&startRender);
 				if (m_pGameStateCurrent) { m_pGameStateCurrent->draw(); }
 				QueryPerformanceCounter((LARGE_INTEGER*)&endRender);
-				float renderSeconds = (endRender - startRender) * secondsPerCount;
+				float renderSeconds = static_cast<float>((endRender - startRender) * secondsPerCount);
 				secondsForSleep -= renderSeconds;
-				int milisecondsForSleep = secondsForSleep * 1000;
+				int milisecondsForSleep = static_cast<int>(secondsForSleep * 1000);
 				if (milisecondsForSleep > 0)
 				{
 					Sleep(milisecondsForSleep);

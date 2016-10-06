@@ -38,16 +38,26 @@ void ProjectileGraphics::draw(GraphicsHelper* pGraphicsHelper)
 
 
 AsteroidGraphics::AsteroidGraphics(Asteroid* pEntity)
-: Graphics(pEntity) {}
+: Graphics(pEntity)
+{
+	m_pAsteroid = pEntity;
+}
 
 AsteroidGraphics::~AsteroidGraphics() {}
+
+void AsteroidGraphics::update(const float seconds)
+{
+	Graphics::update(seconds);
+
+	m_height = m_pAsteroid->getHeight();
+}
 
 void AsteroidGraphics::draw(GraphicsHelper* pGraphicsHelper)
 {
 	pGraphicsHelper->setPosition(m_posX, m_posY);
 	pGraphicsHelper->setDirection(m_direction);
-	pGraphicsHelper->setScale(m_length, m_width);
+	pGraphicsHelper->setScale(m_length, m_width, m_height);
 	pGraphicsHelper->setAlpha(1.0f);
 	pGraphicsHelper->setTexture(2);
-	pGraphicsHelper->drawRectangle();
+	pGraphicsHelper->drawCube();
 }

@@ -38,7 +38,7 @@ class GraphicsHelper
 private:
 	float m_x, m_y;
 	float m_direction;
-	float m_length, m_width;
+	float m_length, m_width, m_height;
 	float m_alpha;
 
 	D3DXMATRIX m_matWorld;
@@ -54,14 +54,13 @@ public:
 
 	void setPosition(const float x, const float y);
 	void setDirection(const float direction);
-	void setScale(const float length, const float width);
+	void setScale(const float length, const float width, const float height = 1.0f);
 	void setAlpha(const float alpha);
 	void setTexture(const int textureID);
-	//void setFontSize(const float size);
 
 	void drawCircle();
 	void drawRectangle();
-	void drawText(const char* text);
+	void drawCube();
 
 private:
 	void invalidateMatrix();

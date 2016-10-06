@@ -4,6 +4,7 @@
 
 #include "gameObjects.h"
 #include "collisions.h"
+#include "actions.h"
 
 
 
@@ -27,6 +28,9 @@ protected:
 	EntityManager m_entityManager;
 	EntityFactory m_entityFactory;
 
+	Action* m_aKeyboardActions[256];
+	Action* m_aMouseActions[3];
+
 public:
 	GameState(DirectX* pDirectX);
 	~GameState();
@@ -35,6 +39,7 @@ public:
 	virtual void draw();
 
 	void reset();
+	void unbindActions();
 	virtual void onEnter() = 0;
 	virtual void onExit() = 0;
 
@@ -60,6 +65,10 @@ protected:
 	float m_timeSurvived;
 	int m_destroyedAsteroids;
 
+	MoveAction m_moveLeftAction;
+	MoveAction m_moveRightAction;
+	AttackAction m_attackAction;
+
 public:
 	BattleGS(DirectX* pDirectX);
 	virtual ~BattleGS();
@@ -68,11 +77,6 @@ public:
 
 	virtual void onEnter();
 	virtual void onExit();
-
-	virtual void onKeyDown(const int key);
-	virtual void onKeyUp(const int key);
-	virtual void onButtonDown(const int mb);
-	virtual void onButtonUp(const int mb);
 
 	virtual void notify(const GAME_EVENT e);
 

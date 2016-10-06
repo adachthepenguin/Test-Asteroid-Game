@@ -349,10 +349,10 @@ bool DirectX::initDevice(HWND hWnd)
 
 bool DirectX::initGeomethry()
 {
-	const int VERTICES_COUNT = 46;
+	const int VERTICES_COUNT = 62;
 	// 0 - 33		circle
 	// 34 - 37		rectangle
-	// 38 - 45		cube
+	// 38 - 61		cube
 
 	CUSTOMVERTEX vertices[VERTICES_COUNT];
 
@@ -395,36 +395,129 @@ bool DirectX::initGeomethry()
 		vertices[i].color = 0xffffffff;
 	}
 
-	vertices[38].x = -0.5f;
-	vertices[38].y = -0.5f;
-	vertices[38].z = -0.5f;
-	vertices[39].x = -0.5f;
-	vertices[39].y = +0.5f;
-	vertices[39].z = -0.5f;
-	vertices[40].x = +0.5f;
-	vertices[40].y = +0.5f;
-	vertices[40].z = -0.5f;
-	vertices[41].x = +0.5f;
-	vertices[41].y = -0.5f;
-	vertices[41].z = -0.5f;
-	vertices[42].x = -0.5f;
-	vertices[42].y = -0.5f;
-	vertices[42].z = +0.5f;
-	vertices[43].x = -0.5f;
-	vertices[43].y = +0.5f;
-	vertices[43].z = +0.5f;
-	vertices[44].x = +0.5f;
-	vertices[44].y = +0.5f;
-	vertices[44].z = +0.5f;
-	vertices[45].x = +0.5f;
-	vertices[45].y = -0.5f;
-	vertices[45].z = +0.5f;
-	for (int i = 38; i < 46; i++)
+	float aAsteroidX[8];
+	float aAsteroidY[8];
+	float aAsteroidZ[8];
+	float aAsteroidTU[4];
+	float aAsteroidTV[4];
+
+	aAsteroidX[0] = -0.5f;
+	aAsteroidY[0] = -0.5f;
+	aAsteroidZ[0] = -0.5f;
+
+	aAsteroidX[1] = +0.5f;
+	aAsteroidY[1] = -0.5f;
+	aAsteroidZ[1] = -0.5f;
+
+	aAsteroidX[2] = -0.5f;
+	aAsteroidY[2] = +0.5f;
+	aAsteroidZ[2] = -0.5f;
+
+	aAsteroidX[3] = +0.5f;
+	aAsteroidY[3] = +0.5f;
+	aAsteroidZ[3] = -0.5f;
+
+	aAsteroidX[4] = -0.5f;
+	aAsteroidY[4] = -0.5f;
+	aAsteroidZ[4] = +0.5f;
+
+	aAsteroidX[5] = +0.5f;
+	aAsteroidY[5] = -0.5f;
+	aAsteroidZ[5] = +0.5f;
+
+	aAsteroidX[6] = -0.5f;
+	aAsteroidY[6] = +0.5f;
+	aAsteroidZ[6] = +0.5f;
+
+	aAsteroidX[7] = +0.5f;
+	aAsteroidY[7] = +0.5f;
+	aAsteroidZ[7] = +0.5f;
+
+	aAsteroidTU[0] = 0.0f;
+	aAsteroidTV[0] = 0.0f;
+
+	aAsteroidTU[1] = 1.0f;
+	aAsteroidTV[1] = 0.0f;
+
+	aAsteroidTU[2] = 1.0f;
+	aAsteroidTV[2] = 1.0f;
+
+	aAsteroidTU[3] = 0.0f;
+	aAsteroidTV[3] = 1.0f;
+
+#define BIND_ASTEROID_VERTICES(_a,_b,_c)	vertices[_a].x = aAsteroidX[_b]; \
+											vertices[_a].y = aAsteroidY[_b]; \
+											vertices[_a].z = aAsteroidZ[_b]; \
+											vertices[_a].tu = aAsteroidTU[_c]; \
+											vertices[_a].tv = aAsteroidTV[_c];
+
+	BIND_ASTEROID_VERTICES(38, 0, 0)
+	BIND_ASTEROID_VERTICES(39, 1, 1)
+	BIND_ASTEROID_VERTICES(40, 3, 2)
+	BIND_ASTEROID_VERTICES(41, 2, 3)
+
+	BIND_ASTEROID_VERTICES(42, 1, 0)
+	BIND_ASTEROID_VERTICES(43, 5, 1)
+	BIND_ASTEROID_VERTICES(44, 7, 2)
+	BIND_ASTEROID_VERTICES(45, 3, 3)
+
+	BIND_ASTEROID_VERTICES(46, 5, 0)
+	BIND_ASTEROID_VERTICES(47, 4, 1)
+	BIND_ASTEROID_VERTICES(48, 6, 2)
+	BIND_ASTEROID_VERTICES(49, 7, 3)
+
+	BIND_ASTEROID_VERTICES(50, 4, 0)
+	BIND_ASTEROID_VERTICES(51, 0, 1)
+	BIND_ASTEROID_VERTICES(52, 2, 2)
+	BIND_ASTEROID_VERTICES(53, 6, 3)
+
+	BIND_ASTEROID_VERTICES(54, 2, 0)
+	BIND_ASTEROID_VERTICES(55, 3, 1)
+	BIND_ASTEROID_VERTICES(56, 7, 2)
+	BIND_ASTEROID_VERTICES(57, 6, 3)
+
+	BIND_ASTEROID_VERTICES(58, 1, 0)
+	BIND_ASTEROID_VERTICES(59, 0, 1)
+	BIND_ASTEROID_VERTICES(60, 4, 2)
+	BIND_ASTEROID_VERTICES(61, 5, 3)
+
+#undef	BIND_ASTEROID_VERTICES
+
+	for (int i = 38; i < 62; i++)
 	{
-		vertices[i].tu = 0.0f;
-		vertices[i].tv = 0.0f;
 		vertices[i].color = 0xffffffff;
 	}
+
+	//vertices[38].x = -0.5f;
+	//vertices[38].y = -0.5f;
+	//vertices[38].z = -0.5f;
+	//vertices[39].x = -0.5f;
+	//vertices[39].y = +0.5f;
+	//vertices[39].z = -0.5f;
+	//vertices[40].x = +0.5f;
+	//vertices[40].y = +0.5f;
+	//vertices[40].z = -0.5f;
+	//vertices[41].x = +0.5f;
+	//vertices[41].y = -0.5f;
+	//vertices[41].z = -0.5f;
+	//vertices[42].x = -0.5f;
+	//vertices[42].y = -0.5f;
+	//vertices[42].z = +0.5f;
+	//vertices[43].x = -0.5f;
+	//vertices[43].y = +0.5f;
+	//vertices[43].z = +0.5f;
+	//vertices[44].x = +0.5f;
+	//vertices[44].y = +0.5f;
+	//vertices[44].z = +0.5f;
+	//vertices[45].x = +0.5f;
+	//vertices[45].y = -0.5f;
+	//vertices[45].z = +0.5f;
+	//for (int i = 38; i < 46; i++)
+	//{
+	//	vertices[i].tu = 0.0f;
+	//	vertices[i].tv = 0.0f;
+	//	vertices[i].color = 0xffffffff;
+	//}
 
 	if (FAILED(m_pDev->CreateVertexBuffer(VERTICES_COUNT * sizeof(CUSTOMVERTEX), 0, CUSTOM_FVF, D3DPOOL_DEFAULT, &m_pVB, 0)))
 	{

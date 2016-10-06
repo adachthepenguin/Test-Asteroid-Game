@@ -37,9 +37,14 @@ public:
 class AsteroidGraphics : public Graphics
 {
 protected:
+	Asteroid* m_pAsteroid;
+
+	float m_height;
+
 public:
 	AsteroidGraphics(Asteroid* pEntity);
 	virtual ~AsteroidGraphics();
 
+	virtual void update(const float seconds);
 	virtual void draw(GraphicsHelper* pGraphicsHelper);
 };

@@ -8,6 +8,8 @@
 GameState::GameState(DirectX* pDirectX)
 {
 	m_pDirectX = pDirectX;
+
+	unbindActions();
 }
 
 GameState::~GameState() {}
@@ -31,13 +33,49 @@ void GameState::reset()
 	onEnter();
 }
 
-void GameState::onKeyDown(const int key) {}
+void GameState::unbindActions()
+{
+	for (int i = 0; i < 256; i++)
+	{
+		m_aKeyboardActions[i] = 0;
+	}
+	for (int i = 0; i < 3; i++)
+	{
+		m_aMouseActions[i] = 0;
+	}
+}
 
-void GameState::onKeyUp(const int key) {}
+void GameState::onKeyDown(const int key)
+{
+	if (m_aKeyboardActions[key])
+	{
+		m_aKeyboardActions[key]->onPress();
+	}
+}
 
-void GameState::onButtonDown(const int mb) {}
+void GameState::onKeyUp(const int key)
+{
+	if (m_aKeyboardActions[key])
+	{
+		m_aKeyboardActions[key]->onRelease();
+	}
+}
 
-void GameState::onButtonUp(const int mb) {}
+void GameState::onButtonDown(const int mb)
+{
+	if (m_aMouseActions[mb])
+	{
+		m_aMouseActions[mb]->onPress();
+	}
+}
+
+void GameState::onButtonUp(const int mb)
+{
+	if (m_aMouseActions[mb])
+	{
+		m_aMouseActions[mb]->onRelease();
+	}
+}
 
 void GameState::notify(const GAME_EVENT ge) {}
 
@@ -61,9 +99,10 @@ void BattleGS::update(const float seconds)
 	if (m_needsRestart)
 	{
 		std::string info;
-		info += "Survive time: ";
-		info += std::to_string(static_cast<int>(m_timeSurvived));
-		info += "s\nAsteroids destroyed: ";
+		//info += "Survive time: ";
+		//info += std::to_string(static_cast<int>(m_timeSurvived));
+		//info += "s\nAsteroids destroyed: ";
+		info += "Asteroids destroyed: ";
 		info += std::to_string(m_destroyedAsteroids);
 		MessageBox(0, info.c_str(), "You got destroyed!", MB_OK);
 		reset();
@@ -73,7 +112,7 @@ void BattleGS::update(const float seconds)
 void BattleGS::onEnter()
 {
 	m_pDirectX->setPosition(0.0f, 0.0f);
-	m_pDirectX->setDistance(2.0f);
+	m_pDirectX->setDistance(4.0f);
 
 	m_needsRestart = false;
 	m_destroyedAsteroids = 0;
@@ -83,11 +122,11 @@ void BattleGS::onEnter()
 
 	Spaceship* pSpaceship = m_entityFactory.createSpaceship(&m_entityManager);
 	pSpaceship->setX(0.0f);
-	pSpaceship->setY(-1.5f);
+	pSpaceship->setY(-3.75f);
 	pSpaceship->setDirection(0.0f);
 	pSpaceship->setLength(0.5f);
 	pSpaceship->setWidth(0.5f);
-	pSpaceship->setBounds(-2.5f, 2.5f);
+	pSpaceship->setBounds(-5.0f, 5.0f);
 	m_controlledSpaceshipID = pSpaceship->getID();
 
 	AsteroidSpawner* pAsteroidSpawner = m_entityFactory.createAsteroidSpawner(&m_entityManager);
@@ -99,61 +138,21 @@ void BattleGS::onEnter()
 	pAsteroidSpawner->setBounds(-2.25f, 2.25f, 1.5f, 2.0f);
 	pAsteroidSpawner->setDeviation(22.5f);
 	m_asteroidSpawnerID = pAsteroidSpawner->getID();
+
+	m_moveLeftAction = MoveAction(&m_entityManager, pSpaceship->getID(), SM_MOVELEFT, SM_STOPLEFT);
+	m_moveRightAction = MoveAction(&m_entityManager, pSpaceship->getID(), SM_MOVERIGHT, SM_STOPRIGHT);
+	m_attackAction = AttackAction(&m_entityManager, pSpaceship->getID());
+
+	unbindActions();
+	m_aKeyboardActions[VK_LEFT] = &m_moveLeftAction;
+	m_aKeyboardActions[VK_RIGHT] = &m_moveRightAction;
+	m_aKeyboardActions[VK_SPACE] = &m_attackAction;
+	m_aKeyboardActions['A'] = &m_moveLeftAction;
+	m_aKeyboardActions['D'] = &m_moveRightAction;
+	m_aKeyboardActions['S'] = &m_attackAction;
 }
 
 void BattleGS::onExit() {}
-
-void BattleGS::onKeyDown(const int key)
-{
-	if (key == VK_SPACE)
-	{
-		Spaceship* pSpaceship = dynamic_cast<Spaceship*>(m_entityManager.getEntityByID(m_controlledSpaceshipID));
-		if (pSpaceship)
-		{
-			pSpaceship->attack();
-		}
-	}
-	else if (key == VK_LEFT)
-	{
-		Spaceship* pSpaceship = dynamic_cast<Spaceship*>(m_entityManager.getEntityByID(m_controlledSpaceshipID));
-		if (pSpaceship)
-		{
-			pSpaceship->applyMovement(SM_MOVELEFT);
-		}
-	}
-	else if (key == VK_RIGHT)
-	{
-		Spaceship* pSpaceship = dynamic_cast<Spaceship*>(m_entityManager.getEntityByID(m_controlledSpaceshipID));
-		if (pSpaceship)
-		{
-			pSpaceship->applyMovement(SM_MOVERIGHT);
-		}
-	}
-}
-
-void BattleGS::onKeyUp(const int key)
-{
-	if (key == VK_LEFT)
-	{
-		Spaceship* pSpaceship = dynamic_cast<Spaceship*>(m_entityManager.getEntityByID(m_controlledSpaceshipID));
-		if (pSpaceship)
-		{
-			pSpaceship->applyMovement(SM_STOPLEFT);
-		}
-	}
-	else if (key == VK_RIGHT)
-	{
-		Spaceship* pSpaceship = dynamic_cast<Spaceship*>(m_entityManager.getEntityByID(m_controlledSpaceshipID));
-		if (pSpaceship)
-		{
-			pSpaceship->applyMovement(SM_STOPRIGHT);
-		}
-	}
-}
-
-void BattleGS::onButtonDown(const int mb) {}
-
-void BattleGS::onButtonUp(const int mb) {}
 
 void BattleGS::notify(const GAME_EVENT ge)
 {

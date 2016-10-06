@@ -7,6 +7,9 @@ HRESULT CALLBACK MainEventProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 {
 	switch (uMsg)
 	{
+		case WM_CREATE:
+			ShowCursor(false);
+			break;
 		case WM_DESTROY:
 			PostQuitMessage(0);
 			break;

@@ -41,8 +41,16 @@ protected:
 
 	float m_height;
 
+	float m_rotationX;
+	float m_rotationY;
+	float m_rotationZ;
+
+	float m_rotationXPerSec;
+	float m_rotationYPerSec;
+	float m_rotationZPerSec;
+
 public:
-	AsteroidGraphics(Asteroid* pEntity);
+	AsteroidGraphics(Asteroid* pEntity, const float rotationDeviation);
 	virtual ~AsteroidGraphics();
 
 	virtual void update(const float seconds);

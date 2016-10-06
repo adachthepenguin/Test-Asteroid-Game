@@ -31,6 +31,8 @@ protected:
 	Action* m_aKeyboardActions[256];
 	Action* m_aMouseActions[3];
 
+	EntityUpdater m_updater;
+
 public:
 	GameState(DirectX* pDirectX);
 	~GameState();

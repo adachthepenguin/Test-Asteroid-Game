@@ -143,6 +143,53 @@ float Entity::getBoundingCircle() const
 
 
 
+EntityVisitor::EntityVisitor() {}
+
+EntityVisitor::~EntityVisitor() {}
+
+
+
+EntityUpdater::EntityUpdater()
+{
+	m_updateSeconds = 0.0f;
+}
+
+EntityUpdater::~EntityUpdater() {}
+
+void EntityUpdater::visit(Entity* pEntity)
+{
+	if (pEntity)
+	{
+		pEntity->update(m_updateSeconds);
+	}
+}
+
+void EntityUpdater::setUpdateTime(const float seconds)
+{
+	m_updateSeconds = seconds;
+}
+
+
+
+EntityGraphicsVisitor::EntityGraphicsVisitor() {}
+
+EntityGraphicsVisitor::~EntityGraphicsVisitor() {}
+
+void EntityGraphicsVisitor::visit(Entity* pEntity)
+{
+	if (pEntity)
+	{
+		pEntity->draw(m_pGraphicsHelper);
+	}
+}
+
+void EntityGraphicsVisitor::setGraphicsHelper(GraphicsHelper* pGraphicsHelper)
+{
+	m_pGraphicsHelper = pGraphicsHelper;
+}
+
+
+
 EntityManager::EntityManager() {}
 
 EntityManager::~EntityManager()
@@ -212,26 +259,16 @@ int EntityManager::getCount() const
 	return m_entities.size();
 }
 
-void EntityManager::update(const float seconds)
+void EntityManager::visitEntities(EntityVisitor* pVisitor)
 {
-	for (EntityIterator i = m_entities.begin(); i != m_entities.end(); i++)
-	{
-		Entity* pEntity = i->second;
-		if (pEntity)
-		{
-			pEntity->update(seconds);
-		}
-	}
-}
+	if (!pVisitor) { return; }
 
-void EntityManager::draw(GraphicsHelper* pGraphicsHelper)
-{
 	for (EntityIterator i = m_entities.begin(); i != m_entities.end(); i++)
 	{
 		Entity* pEntity = i->second;
 		if (pEntity)
 		{
-			pEntity->draw(pGraphicsHelper);
+			pVisitor->visit(pEntity);
 		}
 	}
 }

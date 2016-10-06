@@ -28,6 +28,11 @@ enum OBJECT_TYPE
 
 
 
+/*! \class Entity
+\brief Base class of all entities.
+
+Abstract class. Each concrete entity class inherits from Entity.
+*/
 class Entity
 {
 	friend class EntityManager;
@@ -91,6 +96,46 @@ private:
 
 
 
+class EntityVisitor
+{
+protected:
+public:
+	EntityVisitor();
+	virtual ~EntityVisitor();
+
+	virtual void visit(Entity* pEntity) = 0;
+};
+
+class EntityUpdater : public EntityVisitor
+{
+protected:
+	float m_updateSeconds;
+
+public:
+	EntityUpdater();
+	virtual ~EntityUpdater();
+
+	virtual void visit(Entity* pEntity);
+
+	void setUpdateTime(const float seconds);
+};
+
+class EntityGraphicsVisitor : public EntityVisitor
+{
+protected:
+	GraphicsHelper* m_pGraphicsHelper;
+
+public:
+	EntityGraphicsVisitor();
+	virtual ~EntityGraphicsVisitor();
+
+	virtual void visit(Entity* pEntity);
+
+	void setGraphicsHelper(GraphicsHelper* pGraphicsHelper);
+};
+
+
+
 class EntityManager
 {
 private:
@@ -107,12 +152,9 @@ public:
 	Entity* getEntityByID(const unsigned id);
 	int getCount() const;
 
-	void update(const float seconds);
-	void draw(GraphicsHelper* pGraphicsHelper);
+	void visitEntities(EntityVisitor* pVisitor);
 
 	void testCollisions(CollisionHandler* pCollisionHandler);
-
-	//void testEntities(EntityTester* pTester);
 };
 
 

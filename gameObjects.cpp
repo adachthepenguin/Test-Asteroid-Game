@@ -242,7 +242,7 @@ bool Asteroid::createGraphics()
 {
 	if (m_pGraphics) { return false; }
 
-	m_pGraphics = new AsteroidGraphics(this);
+	m_pGraphics = new AsteroidGraphics(this, 30.0f);
 
 	return true;
 }
@@ -255,6 +255,9 @@ AsteroidSpawner::AsteroidSpawner(const unsigned id)
 	m_spawnRate = 1.0f;
 	m_spawnProgress = 0.0f;
 	m_startingSpeed = 0.0f;
+
+	m_height = 0.0f;
+	m_sizePercDeviation = 0.0f;
 }
 
 AsteroidSpawner::~AsteroidSpawner() {}
@@ -263,15 +266,15 @@ void AsteroidSpawner::spawnAsteroid()
 {
 	m_posX = m_leftBound + Randomizer::getInstance().generateFloat(m_rightBound - m_leftBound, 1000);
 	m_posY = m_bottomBound + Randomizer::getInstance().generateFloat(m_topBound - m_bottomBound, 1000);
-	m_direction = 270.0f + Randomizer::getInstance().generateFloat(2.0f * m_deviation, 1000) - m_deviation;
+	m_direction = 270.0f + Randomizer::getInstance().generateFloat(2.0f * m_directionDeviation, 1000) - m_directionDeviation;
 
 	Asteroid* pAsteroid = m_pEntityFactory->createAsteroid(m_pEntityManager);
 	pAsteroid->setX(m_posX);
 	pAsteroid->setY(m_posY);
 	pAsteroid->setDirection(m_direction);
-	pAsteroid->setWidth(m_width);
-	pAsteroid->setLength(m_length);
-	pAsteroid->setHeight(m_width); // to change
+	pAsteroid->setWidth(m_width * (1.0f + m_sizePercDeviation * (-1.0f + Randomizer::getInstance().generateFloat(2.0f, 1000))));
+	pAsteroid->setLength(m_length * (1.0f + m_sizePercDeviation * (-1.0f + Randomizer::getInstance().generateFloat(2.0f, 1000))));
+	pAsteroid->setHeight(m_height * (1.0f + m_sizePercDeviation * (-1.0f + Randomizer::getInstance().generateFloat(2.0f, 1000))));
 	float directionInRads = m_direction * D3DX_PI / 180.0f;
 	float xSpeed = cosf(directionInRads) * m_startingSpeed;
 	float ySpeed = sinf(directionInRads) * m_startingSpeed;
@@ -287,15 +290,25 @@ void AsteroidSpawner::setBounds(const float left, const float right, const float
 	m_topBound = top;
 }
 
-void AsteroidSpawner::setDeviation(const float deviation)
+void AsteroidSpawner::setDirectionDeviation(const float deviation)
 {
-	m_deviation = deviation;
+	m_directionDeviation = deviation;
+}
+
+void AsteroidSpawner::setSizePercDeviation(const float deviation)
+{
+	m_sizePercDeviation = deviation;
 }
 
 void AsteroidSpawner::increaseDifficulty()
 {
 	m_spawnRate *= 1.25f;
 	m_startingSpeed *= 1.05f;
+}
+
+void AsteroidSpawner::setHeight(const float height)
+{
+	m_height = height;
 }
 
 bool AsteroidSpawner::initialize()

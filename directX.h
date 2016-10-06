@@ -3,6 +3,7 @@
 
 
 #include <d3dx9.h>
+#include "objects.h"
 
 
 class EntityManager;
@@ -65,6 +66,8 @@ private:
 	float m_eyeDistance;
 
 	GraphicsHelper* m_pGraphicsHelper;
+
+	EntityGraphicsVisitor m_graphicsVisitor;
 
 public:
 	DirectX();

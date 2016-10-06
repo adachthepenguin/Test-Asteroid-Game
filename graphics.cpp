@@ -45,6 +45,17 @@ void GraphicsHelper::setPosition(const float x, const float y)
 void GraphicsHelper::setDirection(const float direction)
 {
 	m_direction = direction;
+	m_rotationX = 0.0f;
+	m_rotationY = 0.0f;
+
+	invalidateMatrix();
+}
+
+void GraphicsHelper::setRotation(const float xAxis, const float yAxis, const float zAxis)
+{
+	m_rotationX = xAxis;
+	m_rotationY = yAxis;
+	m_direction = zAxis;
 
 	invalidateMatrix();
 }
@@ -100,9 +111,12 @@ void GraphicsHelper::drawCube()
 
 void GraphicsHelper::invalidateMatrix()
 {
-	D3DXMATRIX matTranslation, matRotation, matScaling;
+	D3DXMATRIX matTranslation, matRotation, matScaling, matRotationX, matRotationY, matRotationZ;
 	D3DXMatrixTranslation(&matTranslation, m_x, m_y, 0.0f);
-	D3DXMatrixRotationZ(&matRotation, m_direction * D3DX_PI / 180.0f);
+	D3DXMatrixRotationX(&matRotationX, m_direction * D3DX_PI / 180.0f);
+	D3DXMatrixRotationY(&matRotationY, m_direction * D3DX_PI / 180.0f);
+	D3DXMatrixRotationZ(&matRotationZ, m_direction * D3DX_PI / 180.0f);
+	matRotation = matRotationX * matRotationY * matRotationZ;
 	D3DXMatrixScaling(&matScaling, m_length, m_width, m_height);
 
 	m_matWorld = matScaling * matRotation * matTranslation;

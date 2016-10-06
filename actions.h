@@ -13,7 +13,18 @@ public:
 	Action();
 	virtual ~Action();
 
+	/// Reacion on button press.
+	/**
+	Method invoked when button is pressed.
+	Can be overriden.
+	*/
 	virtual void onPress();
+
+	/// Reacion on button release.
+	/**
+	Method invoked when button is released.
+	Can be overriden.
+	*/
 	virtual void onRelease();
 };
 

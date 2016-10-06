@@ -37,7 +37,7 @@ class GraphicsHelper
 {
 private:
 	float m_x, m_y;
-	float m_direction;
+	float m_direction, m_rotationX, m_rotationY;
 	float m_length, m_width, m_height;
 	float m_alpha;
 
@@ -54,6 +54,7 @@ public:
 
 	void setPosition(const float x, const float y);
 	void setDirection(const float direction);
+	void setRotation(const float xAxis, const float yAxis, const float zAxis);
 	void setScale(const float length, const float width, const float height = 1.0f);
 	void setAlpha(const float alpha);
 	void setTexture(const int textureID);

@@ -16,7 +16,9 @@ GameState::~GameState() {}
 
 void GameState::update(const float seconds)
 {
-	m_entityManager.update(seconds);
+	m_updater.setUpdateTime(seconds);
+	m_entityManager.visitEntities(&m_updater);
+	//m_entityManager.update(seconds);
 }
 
 void GameState::draw()
@@ -135,8 +137,10 @@ void BattleGS::onEnter()
 	pAsteroidSpawner->setDirection(270.0f);
 	pAsteroidSpawner->setLength(0.75f);
 	pAsteroidSpawner->setWidth(0.75f);
-	pAsteroidSpawner->setBounds(-2.25f, 2.25f, 1.5f, 2.0f);
-	pAsteroidSpawner->setDeviation(22.5f);
+	pAsteroidSpawner->setHeight(0.75f);
+	pAsteroidSpawner->setBounds(-5.0f, 5.0f, 3.5f, 4.0f);
+	pAsteroidSpawner->setDirectionDeviation(22.5f);
+	pAsteroidSpawner->setSizePercDeviation(0.75f);
 	m_asteroidSpawnerID = pAsteroidSpawner->getID();
 
 	m_moveLeftAction = MoveAction(&m_entityManager, pSpaceship->getID(), SM_MOVELEFT, SM_STOPLEFT);

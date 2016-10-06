@@ -104,11 +104,14 @@ protected:
 	float m_spawnProgress;
 	float m_startingSpeed;
 
+	float m_height;
+	float m_sizePercDeviation;
+
 	float m_leftBound;
 	float m_rightBound;
 	float m_bottomBound;
 	float m_topBound;
-	float m_deviation;
+	float m_directionDeviation;
 
 public:
 	AsteroidSpawner(const unsigned id);
@@ -116,8 +119,11 @@ public:
 
 	void spawnAsteroid();
 	void setBounds(const float left, const float right, const float bottom, const float top);
-	void setDeviation(const float deviation);
+	void setDirectionDeviation(const float deviation);
+	void setSizePercDeviation(const float deviation);
 	void increaseDifficulty();
+
+	void setHeight(const float height);
 
 	virtual bool initialize();
 

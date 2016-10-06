@@ -204,7 +204,8 @@ void DirectX::render(EntityManager* pEntityManager)
 
 		if (pEntityManager)
 		{
-			pEntityManager->draw(m_pGraphicsHelper);
+			m_graphicsVisitor.setGraphicsHelper(m_pGraphicsHelper);
+			pEntityManager->visitEntities(&m_graphicsVisitor);
 		}
 		
 		m_pDev->EndScene();
